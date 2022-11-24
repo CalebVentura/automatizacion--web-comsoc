@@ -1,0 +1,10 @@
+SELECTORES CSS
+body > div > main > div.row.row-cols-1.row-cols-md-3.mb-3.text-center > div:nth-child(1) > div > div.card-body > h1
+body > div > main > div.text-center > div:nth-child(1) > div > div:nth-child(2) > h1
+main > div.text-center > div:nth-child(1) > div > div:nth-child(2) > h1
+main > div.text-center > div:nth-child(1) h1.pricing-card-title
+h1.pricing-card-title
+.pricing-card-title
+
+SELECTORES XPATH
+/div/main/div[1]/div[1]/div/div[2]/h1
