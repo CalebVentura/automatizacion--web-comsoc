@@ -2,5 +2,8 @@
 git clone https://github.com/CalebVentura/automatizacion--web-comsoc.git  
 
 ## ejecutar comandos
-cd automatizacion--web-comsoc
-npm install
+ - cd automatizacion--web-comsoc
+ - npm install
+
+# Documentación
+https://pptr.dev/
