@@ -8,17 +8,22 @@ const delay = require('delay')
 
 const root = path.dirname(require.main.filename)
 
+const configuracionNavegador = {
+    args: ['--no-sandbox', '--disable-setuid-sandbox', '--ignore-certificate-errors', '--window-size=1920,1080'],
+    headless: false,
+    defaultViewport: null,
+}
+
 const runCrawler = async () => {
     const pueblosTotales = []
     try {
         // Configurar Inicial del Navegador
-        const browser = await puppeteer.launch({
-            args: ['--no-sandbox', '--disable-setuid-sandbox', '--ignore-certificate-errors', '--window-size=1920,1080'],
-            headless: true,
-            defaultViewport: null,
-        })
+        const browser = await puppeteer.launch(configuracionNavegador)
         const page = await browser.newPage()
-        await page._client.send('Browser.setDownloadBehavior', { behavior: 'allow', downloadPath: root })
+
+        // Setear la ubicaión por defecto de las descargas
+        // await page._client.send('Browser.setDownloadBehavior', { behavior: 'allow', downloadPath: root })
+
         await page.goto('http://sige.inei.gob.pe/test/atlas/')
 
         console.log('Accedí a la página con éxito!! ')
@@ -28,7 +33,7 @@ const runCrawler = async () => {
         //     const select = document.getElementById('cboDepartamento')
         //     const ress = []
         //     for (const option of select) {
-        //         if (['LAMBAYEQUE'].includes(option.innerText)) {
+        //         if (['CUSCO'].includes(option.innerText)) {
         //             ress.push({
         //                 region: option.innerText,
         //                 valueOption: option.value,
@@ -41,8 +46,11 @@ const runCrawler = async () => {
 
         // // selecciona la provincia
         // for (let i = 0; i < resultadosScrapper.length; i++) {
+        //     // Seleccionar el departamento
         //     await page.select('#cboDepartamento', resultadosScrapper[i].valueOption)
         //     await delay(500)
+
+        //     // Extraer las opciones de provincia
         //     resultadosScrapper[i].provincias = await page.evaluate(() => {
         //         const select = document.getElementById('cboProvincia')
         //         const ress = []
@@ -55,14 +63,20 @@ const runCrawler = async () => {
         //         }
         //         return ress
         //     })
+
+        //     console.log(resultadosScrapper[i].provincias.length)
         // }
 
         // // selecciona el distrito
         // for (let i = 0; i < resultadosScrapper.length; i++) {
         //     console.log(resultadosScrapper[i].region)
+        //     // Seleccionar la departamento
         //     await page.select('#cboDepartamento', resultadosScrapper[i].valueOption)
         //     await delay(1000)
+
+        //     // Recorrido por cada provincia para extraer los valores de los distritos
         //     for (let j = 0; j < resultadosScrapper[i].provincias.length ; j++) {
+        //         // Seleccionas la provincia
         //         console.log(resultadosScrapper[i].provincias[j].valueOption)
         //         await page.select('#cboProvincia', resultadosScrapper[i].provincias[j].valueOption)
         //         await delay(1000)
@@ -81,27 +95,29 @@ const runCrawler = async () => {
         //             return ress
         //         })
         //     }
-        //     console.log(resultadosScrapper[i].valueOption)
+        //     // console.log(resultadosScrapper[i].valueOption)
         // }
 
         // // Guardar resultadosScrapper en un json
-        // fs.writeFileSync('seleccionablesxxx.json', JSON.stringify(resultadosScrapper, null, 2))
+        // fs.writeFileSync('seleccionabless.json', JSON.stringify(resultadosScrapper, null, 2))
 
         // Leer un json
-        const resultadosScrapper = JSON.parse(fs.readFileSync('seleccionables.json', 'utf8'))
+        const resultadosScrapper = JSON.parse(fs.readFileSync('seleccionabless.json', 'utf8'))
         // resultadosScrapper = resultadosScrapper[0].provincias.slice(1)
         // fs.writeFileSync('seleccionables.json', JSON.stringify(resultadosScrapper, null, 2))
 
-        // Selecciono solo Lambayeque
-        console.log(resultadosScrapper[0].region)
+        // Selecciono solo Cusco
+        console.log(resultadosScrapper[0])
         await page.select('#cboDepartamento', resultadosScrapper[0].valueOption)
         await delay(1000)
 
         // Seleccionar cada provincia
-        for (const provincia of resultadosScrapper[0].provincias) {
+        for (const provincia of resultadosScrapper[0].provincias.slice(0, 1)) {
+            // Seleccionar la provincia
             await page.select('#cboProvincia', provincia.valueOption)
             await delay(500)
-            for (const distrito of provincia.distritos) {
+            for (const distrito of provincia.distritos.slice(0, 1)) {
+                // Seleccionando el distrito
                 await page.select('#cboDistrito', distrito.valueOption)
                 await delay(500)
 
@@ -114,8 +130,11 @@ const runCrawler = async () => {
 
                 await delay(500)
 
-                for (let i = 1; i < pueblos.length + 1; i++) {
+                // for (let i = 1; i < pueblos.length + 1; i++) {
+                for (let i = 1; i < 5; i++) {
                     console.log(`${provincia.provincia} => ${distrito.distrito} => ${pueblos[i - 1]}`)
+
+                    // Click en cada pueblo
                     await page.click(`#tblResultados > tbody > tr:nth-child(${i}) > td > a > li > u`)
                     await delay(2500)
 
