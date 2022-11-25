@@ -40,7 +40,7 @@ const runCrawler = async () => {
         for (const subcategoria of subcategoriasArr) {
             // console.log(subcategoria.nombre)
             await page.goto(subcategoria.url)
-            await delay(2000)
+            await page.waitForSelector('div.contenidor-tematicas > div.resultat-cercador > ul > li', { timeout: 20000})
 
             const librosSubCategoriaArr = await page.evaluate(() => {
                 const tematicas = document.querySelectorAll('div.contenidor-tematicas > div.resultat-cercador > ul > li')
@@ -59,6 +59,8 @@ const runCrawler = async () => {
     
                 return librosSubCategoria
             })
+
+            // await page.click('div.paginacio-seguent > a > i')
 
             libros.push(...librosSubCategoriaArr)
 
