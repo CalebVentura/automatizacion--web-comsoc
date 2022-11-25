@@ -1,3 +1,6 @@
+const fs = require('fs')
+const path = require('path')
+
 const puppeteer = require('puppeteer')
 const delay = require('delay')
 
@@ -35,7 +38,7 @@ const runCrawler = async () => {
 
         const libros = []
         for (const subcategoria of subcategoriasArr) {
-            console.log(subcategoria.nombre)
+            // console.log(subcategoria.nombre)
             await page.goto(subcategoria.url)
             await delay(2000)
 
@@ -46,7 +49,12 @@ const runCrawler = async () => {
                     const urlImagen = tematica.querySelector('a > div.portada > img').getAttribute('src')
                     const titulo = tematica.querySelector('a > div.titol').innerText
                     const autor = tematica.querySelector('div.autors').innerText
-                    librosSubCategoria.push({ urlImagen, titulo, autor })
+                    librosSubCategoria.push({
+                        // subcategoria: subcategoria.nombre,
+                        urlImagen,
+                        titulo,
+                        autor
+                    })
                 })
     
                 return librosSubCategoria
@@ -56,7 +64,14 @@ const runCrawler = async () => {
 
         }
 
+        console.log(libros)
+
         // console.log(subcategoriasArr)
+
+        // Leer el archivo notas.txt
+        fs.writeFileSync(path.join(__dirname, 'libros.json'), JSON.stringify(libros, null, 2), { encoding: 'utf-8'}, (error) => {
+            if (error) console.log(error)
+        })
 
         await delay(4000)
 
