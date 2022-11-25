@@ -1,7 +1,9 @@
+// Declaración de variables que no cambian
 const configuracion = {
     headless: true,
 }
 
+// Declaración de variables que cambian
 let textoEncontrado = ''
 // var edad = 23
 textoEncontrado = textoEncontrado + 'Caleb Ventura'

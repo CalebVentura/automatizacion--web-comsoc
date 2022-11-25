@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer')
 const delay = require('delay')
 
+// Configuración del navegador
 const configBrowser = {
     defaultViewport: {
         width: 1920,
@@ -17,6 +18,8 @@ const runCrawler = async () => {
         console.log('Inicio de navegador')
         const page = await browser.newPage()
         await page.goto('https://www.planetadelibros.com.pe/')
+
+        // await categorias.click()
         await delay(2000)
 
         await browser.close()
