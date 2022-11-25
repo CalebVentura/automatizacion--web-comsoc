@@ -1,9 +1,8 @@
-# Clonar el repositorio
-git clone https://github.com/CalebVentura/automatizacion--web-comsoc.git  
+# Librería Puppeteer
+https://pptr.dev/
 
-## ejecutar comandos
+# Documentación local
+## Clonar el repositorio
+ `git clone https://github.com/CalebVentura/automatizacion--web-comsoc.git`
  - cd automatizacion--web-comsoc
  - npm install
-
-# Documentación
-https://pptr.dev/
